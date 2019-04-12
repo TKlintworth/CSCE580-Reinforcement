@@ -46,6 +46,10 @@ class ValueEstimationAgent(Agent):
         self.discount = float(gamma)
         self.numTraining = int(numTraining)
 
+        #for a in range(env.nA):
+            #for prob, next_state, reward, done in env.P[state][a]:
+                #A[a] += prob * (reward + discount_factor * V[next_state])
+
     ####################################
     #    Override These Functions      #
     ####################################

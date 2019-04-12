@@ -56,31 +56,36 @@ class ValueIterationAgent(ValueEstimationAgent):
         self.mdp = mdp
         self.discount = discount
         self.iterations = iterations
-        self.values = util.Counter() # A Counter is a dict with default 0
-
+        self.values = util.Counter() #A Counter is a dict with default 0
+        
         #me defining mdp variables
         self.state = mdp.getStartState()
         self.possActions = mdp.getPossibleActions(self.state)
         #self.reward = mdp.getReward() #Get the reward for the state, action, nextState transition
 
-        #reward for going north from start state
-        print("reward for going north from start state: ", mdp.getReward(self.state, action = "north", nextState = (0,1)))
+        
+        #V(s) = max_{a in actions} Q(s,a)
+        #return self.values[state]
+
+
+
+
+
 
         #reachable states and their probabilities for the start state
         self.reachableStatesAndProbs = []
         
-        totalReachableStates = []
         for action in self.possActions:
             print("action ", action, sep = ": ", end = " ")
             self.reachableStatesAndProbs += mdp.getTransitionStatesAndProbs(self.state, action)
             print(", possible states and their probabilities (nextState, prob): ", mdp.getTransitionStatesAndProbs(self.state, action))
+            print("values: ", self.values)
         print("reachable states and probs: ", self.reachableStatesAndProbs)
         
 
         #run value iteration using what we have
         self.runValueIteration()
 
-        
 
     def runValueIteration(self):
         # Write value iteration code here
@@ -90,13 +95,31 @@ class ValueIterationAgent(ValueEstimationAgent):
         print("values: ", self.values)
         print("start state: ", self.state)
         print("possible actions: ", self.possActions)
+
+
         
-        for i in range(self.iterations):
-            print(self.iterations)
+        #reward = mdp.getReward(state, action, nextState)
+        value = 0
+        if self.mdp.isTerminal(self.state):
+            return 0
+        self.values = {}
+        for action in self.mdp.getPossibleActions(self.state):
+            self.values[self.state] = 0
+            for nextState,probability in self.mdp.getTransitionStatesAndProbs(self.state, action):
+                reward = self.mdp.getReward(self.state, action, nextState)
+                self.values[nextState] += probability*(reward + self.discount*1.1) #self.previous_values[nextState]
+        return 0
+        
+
+        #TERMINAL STATES ARE 0 VALUE
+
+        #this was a stack overflow answer of valueiteration
+        #actionCost[action] += probability * reward + discount * self.previous_values[nextState]
             
     def getValue(self, state):
         """
           Return the value of the state (computed in __init__).
+          V(s) = max_{a in actions} Q(s,a)
         """
         return self.values[state]
 
@@ -115,12 +138,11 @@ class ValueIterationAgent(ValueEstimationAgent):
               mdp.isTerminal(state)
         """
         qVal = 0
-        nextState = mdp.getTransitionStatesAndProbs(state, action)
-        reward = mdp.getReward(state, action, nextState)
-        self.getValue(nextState)
-        
-        qVal = self.getQValue(state,action)
+        for nextState, probability in self.mdp.getTransitionStatesAndProbs(state,action):
+            reward = self.mdp.getReward(self.state,action,nextState)
+            qval += probability * (reward + self.discount*self.getValue(state))
         return qVal
+        
         util.raiseNotDefined()
 
     def computeActionFromValues(self, state):
@@ -133,8 +155,19 @@ class ValueIterationAgent(ValueEstimationAgent):
           terminal state, you should return None.
         """
         "*** YOUR CODE HERE ***"
-        #for state in state.getLegalActions():
-           # return state
+        bestAction = None
+        actionQval = {}
+        #Make sure there are legal actions
+        if self.mdp.getPossibleActions(state):
+            possActions = self.mdp.getPossibleActions(state)
+        else:
+            return None
+
+        for action in possActions:
+            return 0
+        #for nextState, probability in self.mdp.getTransitionStatesAndProbs(state):
+
+        
 
         util.raiseNotDefined()
 
