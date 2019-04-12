@@ -65,11 +65,19 @@ class ValueIterationAgent(ValueEstimationAgent):
 
         
         #V(s) = max_{a in actions} Q(s,a)
-        #return self.values[state]
-
-
-
-
+        if self.mdp.getPossibleActions(self.state):
+            possActions = self.mdp.getPossibleActions(self.state)
+            qVals = util.Counter()
+            for action in possActions:
+                qVal = self.computeQValueFromValues(self.state,action)
+                print("action, qVal, state:  ",action,qVal,self.state)
+                qVals[action] = qVal
+            #I think this sorts them...
+            sortedQVals = [(k, qVals[k]) for k in sorted(qVals, key=qVals.get, reverse=True)]
+            for k, v in sortedQVals:
+                print(k, v)
+            #self.values[action] = qVal
+            #sortedVals = self.values.sortedKeys()
 
 
         #reachable states and their probabilities for the start state
@@ -158,17 +166,7 @@ class ValueIterationAgent(ValueEstimationAgent):
         "*** YOUR CODE HERE ***"
         #self.values = util.Counter() #A Counter is a dict with default 0
         #Make sure there are legal actions
-        if self.mdp.getPossibleActions(state):
-            possActions = self.mdp.getPossibleActions(state)
-
-            for action in possActions:
-                qVal = self.computeQValueFromValues(state,action)
-                self.values[action] = qVal
-            sortedVals = self.values.sortedKeys()
-            return sortedVals[0]
-
-        else:
-            return None
+      
 
         util.raiseNotDefined()
 
