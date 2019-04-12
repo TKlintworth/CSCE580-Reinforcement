@@ -99,6 +99,7 @@ class ValueIterationAgent(ValueEstimationAgent):
 
         
         #reward = mdp.getReward(state, action, nextState)
+        """
         value = 0
         if self.mdp.isTerminal(self.state):
             return 0
@@ -109,7 +110,7 @@ class ValueIterationAgent(ValueEstimationAgent):
                 reward = self.mdp.getReward(self.state, action, nextState)
                 self.values[nextState] += probability*(reward + self.discount*1.1) #self.previous_values[nextState]
         return 0
-        
+        """
 
         #TERMINAL STATES ARE 0 VALUE
 
@@ -140,7 +141,7 @@ class ValueIterationAgent(ValueEstimationAgent):
         qVal = 0
         for nextState, probability in self.mdp.getTransitionStatesAndProbs(state,action):
             reward = self.mdp.getReward(self.state,action,nextState)
-            qval += probability * (reward + self.discount*self.getValue(state))
+            qVal += probability * (reward + self.discount*self.getValue(state))
         return qVal
         
         util.raiseNotDefined()
@@ -155,19 +156,19 @@ class ValueIterationAgent(ValueEstimationAgent):
           terminal state, you should return None.
         """
         "*** YOUR CODE HERE ***"
-        bestAction = None
-        actionQval = {}
+        #self.values = util.Counter() #A Counter is a dict with default 0
         #Make sure there are legal actions
         if self.mdp.getPossibleActions(state):
             possActions = self.mdp.getPossibleActions(state)
+
+            for action in possActions:
+                qVal = self.computeQValueFromValues(state,action)
+                self.values[action] = qVal
+            sortedVals = self.values.sortedKeys()
+            return sortedVals[0]
+
         else:
             return None
-
-        for action in possActions:
-            return 0
-        #for nextState, probability in self.mdp.getTransitionStatesAndProbs(state):
-
-        
 
         util.raiseNotDefined()
 
