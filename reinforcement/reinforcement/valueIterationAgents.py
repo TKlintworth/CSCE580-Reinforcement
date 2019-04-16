@@ -209,19 +209,19 @@ class AsynchronousValueIterationAgent(ValueIterationAgent):
         count = 0
         #values = util.Counter()
         for k in range(self.iterations):
-            count = k
-            print("k, count", k, count)
-            if count >= statesLength:
-                print("count equal to states: ", count, statesLength)
+            if count == statesLength:
                 count = 0
+
             if self.mdp.isTerminal(states[count]):
                 self.values[count] = self.values[count]
                 print("terminal")
-                continue
             else:
                 action = self.computeActionFromValues(states[count])
                 self.values[states[count]] = self.computeQValueFromValues(states[count],action)
                 print("11111111111111111111111111111111111111111111", self.values)
+                #count += 1
+            count += 1
+            print("k, count", k, count)
             
             #self.values = values
             
