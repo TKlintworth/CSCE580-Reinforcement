@@ -64,17 +64,17 @@ class ValueIterationAgent(ValueEstimationAgent):
         #self.reward = mdp.getReward() #Get the reward for the state, action, nextState transition
 
         #reward for going north from start state
-        print("reward for going north from start state: ", mdp.getReward(self.state, action = "north", nextState = (0,1)))
+        #print("reward for going north from start state: ", mdp.getReward(self.state, action = "north", nextState = (0,1)))
 
         #reachable states and their probabilities for the start state
         self.reachableStatesAndProbs = []
         
         totalReachableStates = []
         for action in self.possActions:
-            print("action ", action, sep = ": ", end = " ")
+            #print("action ", action, sep = ": ", end = " ")
             self.reachableStatesAndProbs += mdp.getTransitionStatesAndProbs(self.state, action)
-            print(", possible states and their probabilities (nextState, prob): ", mdp.getTransitionStatesAndProbs(self.state, action))
-        print("reachable states and probs: ", self.reachableStatesAndProbs)
+            #print(", possible states and their probabilities (nextState, prob): ", mdp.getTransitionStatesAndProbs(self.state, action))
+        #print("reachable states and probs: ", self.reachableStatesAndProbs)
         
 
         #run value iteration using what we have
@@ -132,7 +132,7 @@ class ValueIterationAgent(ValueEstimationAgent):
             reward = self.mdp.getReward(state, action, nextState)
             discount = self.discount
             nextValue = self.values[nextState]
-            print("nextValue: ", nextValue, self.values)
+            #print("nextValue: ", nextValue, self.values)
             qVal += probability*(reward+discount*nextValue)
         
         return qVal
@@ -149,8 +149,6 @@ class ValueIterationAgent(ValueEstimationAgent):
           terminal state, you should return None.
         """
         "*** YOUR CODE HERE ***"
-        #for state in state.getLegalActions():
-           # return state
         
         possibleActions = self.mdp.getPossibleActions(state)
         actions = util.Counter()
@@ -201,10 +199,34 @@ class AsynchronousValueIterationAgent(ValueIterationAgent):
               mdp.getReward(state)
               mdp.isTerminal(state)
         """
+        
         ValueIterationAgent.__init__(self, mdp, discount, iterations)
+        
 
     def runValueIteration(self):
-        "*** YOUR CODE HERE ***"
+        states = self.mdp.getStates()
+        statesLength = len(self.mdp.getStates())
+        count = 0
+        #values = util.Counter()
+        for k in range(self.iterations):
+            count = k
+            print("k, count", k, count)
+            if count >= statesLength:
+                print("count equal to states: ", count, statesLength)
+                count = 0
+            if self.mdp.isTerminal(states[count]):
+                self.values[count] = self.values[count]
+                print("terminal")
+                continue
+            else:
+                action = self.computeActionFromValues(states[count])
+                self.values[states[count]] = self.computeQValueFromValues(states[count],action)
+                print("11111111111111111111111111111111111111111111", self.values)
+            
+            #self.values = values
+            
+    
+
 
 class PrioritizedSweepingValueIterationAgent(AsynchronousValueIterationAgent):
     """
