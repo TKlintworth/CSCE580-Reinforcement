@@ -63,7 +63,7 @@ class QLearningAgent(ReinforcementAgent):
         "*** YOUR HERE ***"
         print("state, action", state,action)
         #print("legal actions: ", self.getLegalActions(state))
-        if state not in self.stateQvals:
+        if (state,action) not in self.stateQvals:
           return 0.0
         else:
           return self.stateQvals[(state,action)]
