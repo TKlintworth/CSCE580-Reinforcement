@@ -63,18 +63,11 @@ class ValueIterationAgent(ValueEstimationAgent):
         self.possActions = mdp.getPossibleActions(self.state)
         #self.reward = mdp.getReward() #Get the reward for the state, action, nextState transition
 
-        #reward for going north from start state
-        #print("reward for going north from start state: ", mdp.getReward(self.state, action = "north", nextState = (0,1)))
-
         #reachable states and their probabilities for the start state
         self.reachableStatesAndProbs = []
         
-        totalReachableStates = []
         for action in self.possActions:
-            #print("action ", action, sep = ": ", end = " ")
             self.reachableStatesAndProbs += mdp.getTransitionStatesAndProbs(self.state, action)
-            #print(", possible states and their probabilities (nextState, prob): ", mdp.getTransitionStatesAndProbs(self.state, action))
-        #print("reachable states and probs: ", self.reachableStatesAndProbs)
         
 
         #run value iteration using what we have
@@ -83,13 +76,6 @@ class ValueIterationAgent(ValueEstimationAgent):
         
         
     def runValueIteration(self):
-        #print("iterations: ", self.iterations)
-        #print("discount: ", self.discount)
-        #print("values: ", self.values)
-        #print("start state: ", self.state)
-        #print("possible actions: ", self.possActions)
-
-        
         # Write value iteration code here
         "*** YOUR CODE HERE ***"
         states = self.mdp.getStates()
@@ -271,8 +257,6 @@ class PrioritizedSweepingValueIterationAgent(AsynchronousValueIterationAgent):
 
 
         #highest Q-value across all possible actions from s
-        #maxQ = float('-inf')
-        #maxQP = float('-inf')
         for s in self.mdp.getStates():
             if not self.mdp.isTerminal(s):
                 actions = self.mdp.getPossibleActions(s)
